@@ -42,16 +42,19 @@ func invert(input string) string {
 	return result
 }
 
+func toDecimal(input string) int {
+	decimal, _ := strconv.ParseInt(input, 2, 64)
+	return int(decimal)
+}
+
 func iterate(input []string, mostCommon bool) string {
 	result := input
 	max := len(input[0])
-	i := 0
-	for i < max {
+	for i := 0; i < max; i++ {
 		result = filter(result, i, mostCommon)
 		if len(result) == 1 {
 			break
 		}
-		i++
 	}
 	return result[0]
 }
@@ -61,8 +64,7 @@ func filter(input []string, pos int, mostCommon bool) []string {
 	var ones []string
 
 	for _, val := range input {
-		char := string(val[pos])
-		if char == "0" {
+		if val[pos] == '0' {
 			zeroes = append(zeroes, val)
 		} else {
 			ones = append(ones, val)
@@ -90,11 +92,6 @@ func filter(input []string, pos int, mostCommon bool) []string {
 			return zeroes
 		}
 	}
-}
-
-func toDecimal(input string) int {
-	decimal, _ := strconv.ParseInt(input, 2, 64)
-	return int(decimal)
 }
 
 func Part1(input []string) int {
