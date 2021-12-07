@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"sort"
 	"strconv"
 	"strings"
@@ -11,13 +12,13 @@ import (
 
 func Part1(input []string) int {
 	positions := parsePositions(input[0])
-	result, _ := getShortestTotal(positions, false)
+	result := getShortestTotal(positions, false)
 	return result
 }
 
 func Part2(input []string) int {
 	positions := parsePositions(input[0])
-	result, _ := getShortestTotal(positions, true)
+	result := getShortestTotal(positions, true)
 	return result
 }
 
@@ -31,15 +32,15 @@ func parsePositions(input string) []int {
 	return positions
 }
 
-func getShortestTotal(positions []int, useGauss bool) (int, int) {
-	shortestDistance, shortestPos := -1, -1
+func getShortestTotal(positions []int, useGauss bool) int {
+	shortestDistance := -1
 	for target := positions[0]; target <= positions[len(positions)-1]; target++ {
 		dist := 0
 		for _, pos := range positions {
+			n := int(math.Abs(float64(target - pos)))
 			if !useGauss {
-				dist += getDistance(target, pos)
+				dist += n
 			} else {
-				n := getDistance(target, pos)
 				dist += (n * (n + 1)) / 2
 			}
 
@@ -47,23 +48,12 @@ func getShortestTotal(positions []int, useGauss bool) (int, int) {
 				break
 			}
 		}
-		if dist < shortestDistance || shortestDistance == -1 {
+		if shortestDistance == -1 || dist < shortestDistance {
 			shortestDistance = dist
-			shortestPos = target
 		}
 	}
 
-	return shortestDistance, shortestPos
-}
-
-func getDistance(target int, from int) int {
-	if target == from {
-		return 0
-	}
-	if target > from {
-		return target - from
-	}
-	return from - target
+	return shortestDistance
 }
 
 func main() {
