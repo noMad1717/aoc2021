@@ -100,7 +100,6 @@ func findLowInEdgeRow(row []int, compare []int, rowIndex int) []Point {
 func findBasin(input [][]int, startX int, startY int) map[int]map[int]bool {
 	var processed = make(map[int]map[int]bool)
 	scanX(input, startY, startX, processed)
-
 	return processed
 }
 
@@ -110,11 +109,7 @@ func scanX(input [][]int, y int, startX int, processed map[int]map[int]bool) {
 		if val == 9 {
 			break
 		}
-		if !isProcessed(processed, y, i) {
-			addSetIfNotExists(processed, y)
-			processed[y][i] = true
-			scanY(input, y, i, processed)
-		}
+		processX(input, y, i, processed)
 	}
 
 	for i := startX; i <= len(input[0])-1; i++ {
@@ -122,11 +117,15 @@ func scanX(input [][]int, y int, startX int, processed map[int]map[int]bool) {
 		if val == 9 {
 			break
 		}
-		if !isProcessed(processed, y, i) {
-			addSetIfNotExists(processed, y)
-			processed[y][i] = true
-			scanY(input, y, i, processed)
-		}
+		processX(input, y, i, processed)
+	}
+}
+
+func processX(input [][]int, y int, x int, processed map[int]map[int]bool) {
+	if !isProcessed(processed, y, x) {
+		addSetIfNotExists(processed, y)
+		processed[y][x] = true
+		scanY(input, y, x, processed)
 	}
 }
 
@@ -136,11 +135,7 @@ func scanY(input [][]int, startY int, x int, processed map[int]map[int]bool) {
 		if val == 9 {
 			break
 		}
-		if !isProcessed(processed, i, x) {
-			addSetIfNotExists(processed, i)
-			processed[i][x] = true
-			scanX(input, i, x, processed)
-		}
+		processY(input, i, x, processed)
 	}
 
 	for i := startY; i <= len(input)-1; i++ {
@@ -148,11 +143,15 @@ func scanY(input [][]int, startY int, x int, processed map[int]map[int]bool) {
 		if val == 9 {
 			break
 		}
-		if !isProcessed(processed, i, x) {
-			addSetIfNotExists(processed, i)
-			processed[i][x] = true
-			scanX(input, i, x, processed)
-		}
+		processY(input, i, x, processed)
+	}
+}
+
+func processY(input [][]int, y int, x int, processed map[int]map[int]bool) {
+	if !isProcessed(processed, y, x) {
+		addSetIfNotExists(processed, y)
+		processed[y][x] = true
+		scanX(input, y, x, processed)
 	}
 }
 
