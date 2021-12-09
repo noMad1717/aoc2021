@@ -80,38 +80,32 @@ func getKey(patterns []string) map[string]map[string]bool {
 		}
 	}
 
-	for i := 0; i < 100; i++ {
+	for i := len(key); i < 7; i++ {
 		for j := 0; j < len(sets); j++ {
 			s := sets[j]
-			_, eZero := key["0"]
-			_, eNine := key["9"]
-			_, eThree := key["3"]
-			_, eFive := key["5"]
-			_, eTwo := key["2"]
-			_, eSix := key["6"]
 			if len(s) == 6 {
-				if !eZero && len(utils.Difference(key["4"], s)) == 1 && len(utils.Difference(key["7"], s)) == 0 {
+				if !exists(key, "0") && len(utils.Difference(key["4"], s)) == 1 && len(utils.Difference(key["7"], s)) == 0 {
 					key["0"] = s
 					continue
 				}
-				if !eNine && len(utils.Difference(s, utils.Union(key["4"], key["7"]))) == 1 {
+				if !exists(key, "9") && len(utils.Difference(s, utils.Union(key["4"], key["7"]))) == 1 {
 					key["9"] = s
 					continue
 				}
-				if !eSix && len(utils.Difference(key["4"], s)) == 1 && len(utils.Difference(key["7"], s)) == 1 {
+				if !exists(key, "6") && len(utils.Difference(key["4"], s)) == 1 && len(utils.Difference(key["7"], s)) == 1 {
 					key["6"] = s
 					continue
 				}
 			} else {
-				if !eThree && len(utils.Difference(key["7"], s)) == 0 {
+				if !exists(key, "3") && len(utils.Difference(key["7"], s)) == 0 {
 					key["3"] = s
 					continue
 				}
-				if !eFive && len(utils.Difference(key["4"], s)) == 1 && len(utils.Difference(key["7"], s)) == 1 {
+				if !exists(key, "5") && len(utils.Difference(key["4"], s)) == 1 && len(utils.Difference(key["7"], s)) == 1 {
 					key["5"] = s
 					continue
 				}
-				if !eTwo && len(utils.Difference(key["4"], s)) == 2 {
+				if !exists(key, "2") && len(utils.Difference(key["4"], s)) == 2 {
 					key["2"] = s
 					continue
 				}
@@ -120,11 +114,13 @@ func getKey(patterns []string) map[string]map[string]bool {
 				j = 0
 			}
 		}
-		if len(key) == 7 {
-			break
-		}
 	}
 	return key
+}
+
+func exists(m map[string]map[string]bool, key string) bool {
+	_, exists := m[key]
+	return exists
 }
 
 func parseInput(input []string) []Entry {
